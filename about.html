@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - ImToJu</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styling */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #0066cc;
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #0066cc;
+        }
+
+        /* Main content */
+        main {
+            padding: 40px 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .about-grid {
+                grid-template-columns: 300px 1fr;
+            }
+        }
+
+        .profile-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pic i {
+            font-size: 80px;
+            color: #aaa;
+        }
+
+        .bio-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .username {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .social-links a {
+            color: #555;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #0066cc;
+        }
+
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .personal-highlight {
+            font-style: italic;
+            color: #666;
+            border-left: 3px solid #0066cc;
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .skills-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            width: 80px;
+            /* Fixed width for alignment */
+            margin-right: 15px;
+            /* Space between name and progress bar */
+        }
+
+        .skill-icon {
+            width: 30px;
+            text-align: center;
+            margin-right: 10px;
+            color: #0066cc;
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 8px;
+            background-color: #eaeaea;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #0066cc;
+        }
+
+        .interests-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .interest-tag {
+            background-color: #e6f2ff;
+            color: #0066cc;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #777;
+            font-size: 0.9em;
+            border-top: 1px solid #eaeaea;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-container">
+                <h1>About Me</h1>
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="index.html#projects">Projects</a>
+                    <a href="index.html#contact">Contact</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="about-grid">
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-pic">
+                        <i class="fas fa-user"></i>
+                        <!-- Replace with: <img src="your-photo.jpg" alt="ImToJu"> -->
+                    </div>
+
+                    <div class="bio-section">
+                        <div class="username">ImToJu</div>
+                        <p>Programmer in the making</p>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://github.com/imtoju" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="content-section">
+                    <section>
+                        <h2>Who is ImToJu?</h2>
+                        <p>Just a nobody... for now.</p>
+
+                        <div class="personal-highlight">
+                            Hi, I'm ImToJu. I have a growing passion for programming and math (with some conditions).
+                        </div>
+
+                        <p>I'm currently diving into the world of C/C++ programming while also exploring the fascinating
+                            realm of mathematics. My journey with programming began when I discovered how a few lines of
+                            code could solve complex problems and create something from nothing.</p>
+
+                        <p>While I sometimes struggle with the abstract concepts in mathematics, there's a strange
+                            feeling that keeps pulling me back to it. Maybe it's the satisfaction of finally
+                            understanding a difficult concept, or perhaps it's the elegance of mathematical proofs.
+                            Whatever it is, I think I do love math, even if our relationship is complicated.</p>
+                    </section>
+
+                    <section>
+                        <h2>Skills & Learning Path</h2>
+                        <p>Everyone starts somewhere. Here's where I am on my journey:</p>
+
+                        <div class="skills-grid">
+                            <div>
+                                <h3>Programming</h3>
+                                <div class="skill-item">
+                                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                                    <div class="skill-name">C/C++</div>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item">
+                                    <div class="skill-icon"><i class="fas fa-file-code"></i></div>
+                                    <div class="skill-name">HTML/CSS</div>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" style="width: 1%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3>Mathematics</h3>
+                                <div class="skill-item">
+                                    <div class="skill-icon"><i class="fas fa-infinity"></i></div>
+                                    <div class="skill-name">Analysis</div>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item">
+                                    <div class="skill-icon"><i class="fas fa-project-diagram"></i></div>
+                                    <div class="skill-name">Discrete Math</div>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Interests</h2>
+                        <p>When I'm not coding or solving math problems, you might find me exploring:</p>
+
+                        <div class="interests-list">
+                            <span class="interest-tag">Algorithms</span>
+                            <span class="interest-tag">Problem Solving</span>
+                            <span class="interest-tag">Game Development</span>
+                            <span class="interest-tag">Open Source</span>
+                            <span class="interest-tag">Computer Graphics</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>😲Can't believe someone(like you) click in this page.🎉</p>
+            <p>&copy; 2025 ImToJu. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+
+</html>
