@@ -142,7 +142,7 @@
     height: 100%;
 }
 
-.project-card:has(.project-link):hover {
+.project-card:hover {
     transform: translateY(-5px);
     cursor: pointer;
 }
