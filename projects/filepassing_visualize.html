@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree File Passing Visualization</title>
+    <link rel="stylesheet" href="../assets/css/file_vis_styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Tree File Passing Visualization</h1>
+            <p>Watch how a file passes from the root node to all descendants in a tree structure</p>
+        </header>
+
+        <div id="message">Root node has the file. Press "Next Step" to start passing.</div>
+
+        <div class="controls">
+            <button id="resetBtn">Reset</button>
+            <button id="clearBtn">Clear State</button>
+            <button id="nextBtn">Next Step</button>
+            <button id="playBtn">Auto Play</button>
+            <select id="passingStrategy">
+                <option value="all">All children selection</option>
+                <option value="first">First(based on ID) child selection</option>
+                <option value="largest">Most children selection</option>
+                <option value="random">Random selection</option>
+            </select>
+            <button id="addChildBtn">Add Child</button>
+            <button id="deleteBtn">Delete Node</button>
+        </div>
+
+        <div id="treeViewport" class="visualization">
+            <div class="tree-container" id="treeContainer"></div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e74c3c;"></div>
+                <span>Root Node</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #ecf0f1;"></div>
+                <span>Regular Node</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #2ecc71;"></div>
+                <span>Node with File</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #f39c12;"></div>
+                <span>Chosen Node</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h2>How It Works</h2>
+            <p>This visualization demonstrates file passing in a tree structure:</p>
+            <ol>
+                <li>Initially, only the root node has the file</li>
+                <li>At each step, nodes that have a file can pass a copy to their direct descendants</li>
+                <li>Once a node receives a file, it can pass copies to its own descendants in subsequent steps</li>
+                <li>The process continues until all nodes in the tree have received the file</li>
+            </ol>
+            <p>Use the controls above to navigate through the file passing process step by step or watch it
+                automatically.</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/d3-zoom@3"></script>
+    <script src="../assets/js/tree.js"></script>
+</body>
+
+</html>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me - ImToJu</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset and base styles */
@@ -18,8 +18,8 @@
         body {
             font-family: 'Inter', 'Roboto', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
+            color: var(--on-surface);
+            background-color: var(--surface-color);
         }
 
         .container {
@@ -31,7 +31,7 @@
         /* Header styling */
         header {
             padding: 20px 0;
-            border-bottom: 1px solid #eaeaea;
+            border-bottom: 1px solid var(--outline-variant);
         }
 
         .header-container {
@@ -41,19 +41,19 @@
         }
 
         header h1 {
-            color: #0066cc;
+            color: var(--primary-color);
         }
 
         nav a {
             margin-left: 20px;
             text-decoration: none;
-            color: #555;
+            color: var(--on-surface);
             font-weight: 500;
             transition: color 0.3s;
         }
 
         nav a:hover {
-            color: #0066cc;
+            color: var(--primary-container);
         }
 
         /* Main content */
@@ -74,10 +74,10 @@
         }
 
         .profile-section {
-            background-color: white;
+            background-color: var(--surface-color);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 10px var(--shadow);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -89,7 +89,7 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 20px;
-            background-color: #e0e0e0;
+            background-color: var(--surface-bright);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -97,7 +97,7 @@
 
         .profile-pic i {
             font-size: 80px;
-            color: #aaa;
+            color: var(--on-surface);
         }
 
         .bio-section {
@@ -119,13 +119,13 @@
         }
 
         .social-links a {
-            color: #555;
+            color: var(--on-surface);
             font-size: 1.2rem;
             transition: color 0.3s;
         }
 
         .social-links a:hover {
-            color: #0066cc;
+            color: var(--primary-container);
         }
 
         .content-section {
@@ -135,23 +135,23 @@
         }
 
         section {
-            background-color: white;
+            background-color: var(--surface-color);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 10px var(--shadow);
         }
 
         h2 {
-            color: #0066cc;
+            color: var(--primary-color);
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eaeaea;
+            border-bottom: 1px solid var(--outline-variant);
         }
 
         .personal-highlight {
             font-style: italic;
-            color: #666;
-            border-left: 3px solid #0066cc;
+            color: var(--on-surface);
+            border-left: 3px solid var(--primary-color);
             padding-left: 15px;
             margin: 20px 0;
         }
@@ -186,20 +186,20 @@
             width: 30px;
             text-align: center;
             margin-right: 10px;
-            color: #0066cc;
+            color: var(--primary-color);
         }
 
         .progress-container {
             flex: 1;
             height: 8px;
-            background-color: #eaeaea;
+            background-color: var(--surface-bright);
             border-radius: 4px;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            background-color: #0066cc;
+            background-color: var(--primary-color);
         }
 
         .interests-list {
@@ -210,8 +210,8 @@
         }
 
         .interest-tag {
-            background-color: #e6f2ff;
-            color: #0066cc;
+            background-color: var(--surface-bright);
+            color: var(--primary-color);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -221,9 +221,9 @@
         footer {
             text-align: center;
             padding: 20px 0;
-            color: #777;
+            color: var(--on-surface);
             font-size: 0.9em;
-            border-top: 1px solid #eaeaea;
+            border-top: 1px solid var(--outline-variant);
             margin-top: 40px;
         }
     </style>

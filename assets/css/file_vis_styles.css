@@ -1,0 +1,94 @@
+/*────────────────  Palette ────────────────*/
+:root{
+    /* neutrals */
+    --c-bg:        hsl(213, 40%, 98%);
+    --c-panel:     hsl(  0,  0%,100%);
+    --c-stroke:    hsl(210, 15%, 75%);
+    --c-text:      hsl(215, 15%, 25%);
+    --c-text-d:    hsl(215, 15%, 20%);
+    /* brand + semantic */
+    --c-primary:   hsl(215, 100%, 63%);   /* azure */
+    --c-primary-d: hsl(215, 47%, 49%);
+    --c-success:   hsl(161, 55%, 43%);   /* mint  */
+    --c-success-d: hsl(161, 55%, 35%);
+    --c-info:      hsl(200, 75%, 58%);
+    --c-warning:   hsl( 32, 93%, 54%);
+    --c-danger:    hsl(358, 78%, 59%);
+    --c-danger-d:  hsl(358, 77%, 43%);
+}
+/*────────────────  Layout & text ──────────*/
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0; padding:20px;
+    background:var(--c-bg);  color:var(--c-text);
+}
+.container{max-width:1000px;margin:0 auto;}
+header{text-align:center;margin-bottom:2rem;}
+h1{color:var(--c-text-d);}
+/*────────────────  Controls ───────────────*/
+.controls{
+    display:flex;justify-content:center;gap:1rem;margin-bottom:1.25rem;
+}
+button{
+    padding:10px 20px;font-size:1rem;
+    border:none;border-radius:4px;cursor:pointer;
+    background:var(--c-primary);color:#fff;
+    transition:background .25s;
+}
+button:hover{background:var(--c-primary-d);}
+button:disabled{background:var(--c-stroke);cursor:not-allowed;}
+/*────────────────  Canvas / panel ─────────*/
+.visualization{
+    position:relative;height:500px;padding:30px;
+    background:var(--c-panel);border-radius:8px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+.tree-container{position:relative;width:100%;height:100%;}
+/*────────────────  Nodes ──────────────────*/
+.node{
+    width:60px;height:60px;border-radius:50%;
+    position:absolute;display:flex;align-items:center;justify-content:center;
+    background:hsl(0, 0%, 95%);border:2px solid var(--c-stroke);
+    font-weight:600;font-size:1.1rem;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+.node.root{background:var(--c-danger);border-color:var(--c-danger);}
+.node.root.has-file {background-color: var(--c-danger);border-color: var(--c-danger);}
+.node.has-file{background:var(--c-success);border-color:var(--c-success);}
+.node.received-file{background:var(--c-info);border-color:var(--c-info);box-shadow:0 0 15px rgba(0, 0, 0, .2);}
+.node.selected,
+.node.root.selected{
+    background:var(--c-warning);border-color:var(--c-warning);
+    box-shadow:0 0 15px rgba(255,197,110,.55);
+}
+/*────────────────  Edges ──────────────────*/
+.edge{
+    position:absolute;z-index:1;
+    height:3px;background:var(--c-stroke);
+    transform-origin:left center;
+}
+/*────────────────  File icon ──────────────*/
+.file{
+    position:absolute;z-index:10;
+    width:20px;height:25px;border-radius:3px;
+    background:var(--c-primary);transition:all .5s ease;
+}
+.file::before{
+    content:'';position:absolute;top:0;right:0;
+    width:6px;height:6px;border-radius:0 0 0 3px;
+    background:#fff;
+}
+/*────────────────  Legend / misc ──────────*/
+.legend{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:1.25rem;}
+.legend-item{display:flex;align-items:center;gap:.6rem;}
+.legend-color{width:20px;height:20px;border-radius:50%;}
+.info-panel{
+    margin-top:2rem;padding:1.25rem;
+    background:var(--c-panel);border-radius:8px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+#message{text-align:center;font-size:1.1rem;margin-bottom:1.25rem;}
+#resetBtn{background:var(--c-danger);}
+#resetBtn:hover{background:var(--c-danger-d);}
