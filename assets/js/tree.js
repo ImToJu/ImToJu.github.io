@@ -440,7 +440,7 @@ addChildBtn.addEventListener('click', addChild);
 deleteBtn.addEventListener('click', deleteNode);
 resetBtn.addEventListener('click', () => {
     nodeIdCounter = NODE_ID_START;
-    rootNode = {id: 0, label: 'Root', children: []};
+    rootNode = { id: 0, label: 'Root', children: [] };
     selectedNode = null; // Deselect any selected node
     Object.values(nodeElements).forEach(el => el.classList.remove('selected'));
     nodesHasFile.clear();
@@ -448,7 +448,7 @@ resetBtn.addEventListener('click', () => {
     nodesReceivedFileThisRound.clear();
     initializeVisualization();
 });
-});
+
 clearBtn.addEventListener('click', initializeVisualization);
 nextBtn.addEventListener('click', () => { selectedNode = null; nextStep(); });
 playBtn.addEventListener('click', () => {
