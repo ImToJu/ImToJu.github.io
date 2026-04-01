@@ -4,73 +4,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tree File Passing Visualization</title>
+    <meta name="description"
+        content="Interactive visualization of file passing in tree structures. Watch how files propagate from root to all nodes using different strategies.">
+    <meta name="keywords" content="file passing, tree structure, visualization, algorithm, computer science">
+    <meta name="author" content="ImToJu">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Tree File Passing Visualization">
+    <meta property="og:description"
+        content="Interactive visualization demonstrating file passing algorithms in tree data structures.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://imtoju.github.io/projects/filepassing_visualize.html">
+
+    <title>Tree File Passing Visualization - ImToJu</title>
     <link rel="stylesheet" href="../assets/css/file_vis_styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ✅ ADD THEME PREVENTION SCRIPT -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
 <body>
-    <div class="container">
+
+    <div class="visualization-container">
         <header>
-            <h1>Tree File Passing Visualization</h1>
-            <p>Watch how a file passes from the root node to all descendants in a tree structure</p>
+            <div class="header-container">
+                <h1 class="header-title">Tree File Passing Visualization</h1>
+                <p>Watch how a file passes from the root node to all descendants in a tree structure using different
+                    propagation strategies</p>
+                <nav>
+                    <a href="../index.html">Home</a>
+                    <a href="../about.html">About</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                </nav>
+            </div>
         </header>
 
-        <div id="message">Root node has the file. Press "Next Step" to start passing.</div>
-
-        <div class="controls">
-            <button id="resetBtn">Reset</button>
-            <button id="clearBtn">Clear State</button>
-            <button id="nextBtn">Next Step</button>
-            <button id="playBtn">Auto Play</button>
-            <select id="passingStrategy">
-                <option value="all">All children selection</option>
-                <option value="first">First(based on ID) child selection</option>
-                <option value="largest">Most children selection</option>
-                <option value="random">Random selection</option>
-            </select>
-            <button id="addChildBtn">Add Child</button>
-            <button id="deleteBtn">Delete Node</button>
-        </div>
-
-        <div id="treeViewport" class="visualization">
-            <div class="tree-container" id="treeContainer"></div>
-        </div>
-
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #e74c3c;"></div>
-                <span>Root Node</span>
+        <main id="main">
+            <div id="message" role="status" aria-live="polite">
+                Root node has the file. Press "Next Step" to start passing.
             </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #ecf0f1;"></div>
-                <span>Regular Node</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #2ecc71;"></div>
-                <span>Node with File</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #f39c12;"></div>
-                <span>Chosen Node</span>
-            </div>
-        </div>
 
-        <div class="info-panel">
-            <h2>How It Works</h2>
-            <p>This visualization demonstrates file passing in a tree structure:</p>
-            <ol>
-                <li>Initially, only the root node has the file</li>
-                <li>At each step, nodes that have a file can pass a copy to their direct descendants</li>
-                <li>Once a node receives a file, it can pass copies to its own descendants in subsequent steps</li>
-                <li>The process continues until all nodes in the tree have received the file</li>
-            </ol>
-            <p>Use the controls above to navigate through the file passing process step by step or watch it
-                automatically.</p>
-        </div>
+            <section class="controls" role="toolbar" aria-label="Visualization controls">
+                <button id="resetBtn" type="button" aria-label="Reset the visualization to initial state">
+                    <i class="fas fa-redo" aria-hidden="true"></i> Reset
+                </button>
+                <button id="clearBtn" type="button" aria-label="Clear all file states">
+                    <i class="fas fa-eraser" aria-hidden="true"></i> Clear State
+                </button>
+                <button id="nextBtn" type="button" aria-label="Execute next step in file passing">
+                    <i class="fas fa-step-forward" aria-hidden="true"></i> Next Step
+                </button>
+                <button id="playBtn" type="button" aria-label="Start automatic file passing">
+                    <i class="fas fa-play" aria-hidden="true"></i> Auto Play
+                </button>
+
+                <label for="passingStrategy" class="visually-hidden">File passing strategy</label>
+                <select id="passingStrategy" aria-label="Choose file passing strategy">
+                    <option value="all">All children selection</option>
+                    <option value="first">First (based on ID) child selection</option>
+                    <option value="largest">Most children selection</option>
+                    <option value="random">Random selection</option>
+                </select>
+
+                <button id="addChildBtn" type="button" aria-label="Add a child node to selected node">
+                    <i class="fas fa-plus" aria-hidden="true"></i> Add Child
+                </button>
+                <button id="deleteBtn" type="button" aria-label="Delete selected node">
+                    <i class="fas fa-trash" aria-hidden="true"></i> Delete Node
+                </button>
+            </section>
+
+            <section class="visualization" role="img" aria-label="Tree structure visualization">
+                <div class="tree-container" id="treeContainer">
+                    <!-- Tree nodes will be dynamically generated here -->
+                </div>
+            </section>
+
+            <section class="legend" role="img" aria-label="Legend for node colors">
+                <div class="legend-item">
+                    <div class="legend-color"
+                        style="background-color: var(--vis-node-root); border-color: var(--vis-node-root);"
+                        aria-hidden="true"></div>
+                    <span class="legend-text">Root Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color"
+                        style="background-color: var(--vis-node-default); border-color: var(--outline);"
+                        aria-hidden="true"></div>
+                    <span class="legend-text">Regular Node</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color"
+                        style="background-color: var(--vis-node-file); border-color: var(--vis-node-file);"
+                        aria-hidden="true"></div>
+                    <span class="legend-text">Node with File</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color"
+                        style="background-color: var(--vis-node-received); border-color: var(--vis-node-received);"
+                        aria-hidden="true"></div>
+                    <span class="legend-text">Received File</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color"
+                        style="background-color: var(--vis-node-selected); border-color: var(--vis-node-selected);"
+                        aria-hidden="true"></div>
+                    <span class="legend-text">Selected Node</span>
+                </div>
+            </section>
+
+            <section class="info-panel">
+                <h2>How It Works</h2>
+                <p>This visualization demonstrates various file passing algorithms in tree data structures:</p>
+                <ol>
+                    <li><strong>Initial State:</strong> Only the root node contains the file</li>
+                    <li><strong>Propagation:</strong> Nodes with files can pass copies to their direct children</li>
+                    <li><strong>Strategy Selection:</strong> Different algorithms determine which children receive files
+                    </li>
+                    <li><strong>Completion:</strong> The process continues until all reachable nodes have files</li>
+                </ol>
+
+                <h3>Passing Strategies</h3>
+                <ul>
+                    <li><strong>All Children:</strong> Files are passed to all direct children simultaneously</li>
+                    <li><strong>First Child:</strong> Only the first child (by ID) receives the file</li>
+                    <li><strong>Most Children:</strong> Priority given to nodes with the most descendants</li>
+                    <li><strong>Random:</strong> A random child is selected for file transfer</li>
+                </ul>
+
+                <h3>Interactive Features</h3>
+                <p>
+                    <strong>Navigation:</strong> Use the control buttons to step through the algorithm or watch it run
+                    automatically.
+                    <strong>Modification:</strong> Add or remove nodes to experiment with different tree structures.
+                    <strong>Accessibility:</strong> All controls support keyboard navigation and screen readers.
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <nav aria-label="Return navigation">
+                <a href="../index.html" class="back-link">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Projects
+                </a>
+            </nav>
+            <p>&copy; 2025 ImToJu. Educational visualization project.</p>
+        </footer>
     </div>
 
+    <!-- Error boundary for JavaScript errors -->
+    <div id="error-boundary" class="error-boundary" style="display: none;" role="alert">
+        <h2>Something went wrong</h2>
+        <p>There was an error loading the visualization. Please refresh the page to try again.</p>
+        <button onclick="location.reload()" type="button">Refresh Page</button>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="loading-indicator" aria-hidden="true">
+        <div class="spinner"></div>
+        <p>Loading visualization...</p>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://unpkg.com/d3-zoom@3"></script>
+    <script>
+        // Error handling
+        window.addEventListener('error', function (e) {
+            console.error('JavaScript Error:', e.error);
+            document.getElementById('error-boundary').style.display = 'block';
+            document.getElementById('loading-indicator').style.display = 'none';
+        });
+
+        // Loading management
+        window.addEventListener('load', function () {
+            document.getElementById('loading-indicator').style.display = 'none';
+        });
+    </script>
+    <script src="../assets/js/theme-toggle.js"></script>
     <script src="../assets/js/tree.js"></script>
+
+    <style>
+        /* Additional inline styles for components not in main CSS */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--primary-color);
+            color: var(--on-primary-color);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+        }
+
+        .error-boundary {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--error-container);
+            color: var(--on-error-container);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px var(--shadow);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--outline-variant);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                text-align: center;
+                padding: 1rem;
+                margin-top: 2rem;
+            }
+        }
+    </style>
 </body>
 
 </html>
