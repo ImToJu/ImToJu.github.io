@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CH0</title>
+    <link rel="stylesheet" href="/projects/blog/styles.css">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <a href="./">&larr; Back to Introduction</a>
+    </nav>
+    <article>
+        <h1>Week 1</h1>
+
+        <p>本週將參考 CLRS 第 1 ~ 2 章內容，討論何為演算法，並從插入排序切入，簡單討論如何分析並設計演算法。</p>
+
+        <h2>演算法 - CH1</h2>
+
+        <p>非正式的說，演算法可以是認為一個良定義的計算程序，其接受某些值作為輸入，並在有限時間內產出某些值作為輸出。</p>
+
+        <h3>排序問題 Sorting Problem</h3>
+
+        <p>排序問題通常是指將一串數字序列重新排列成單調遞增的次序。正式的定義如下：</p>
+        <blockquote><b>Input</b>: 由 \(n\) 個數字構成的序列 \(\langle a_1, a_2, \dots, a_n\rangle\)</blockquote>
+        <blockquote><b>Output</b>: 輸入序列的一個置換 \(\langle a_1', a_2', \dots, a_n'\rangle\) 使得 \(a_1' \le a_2' \le \dots \le a_n'\)</blockquote>
+        <p>例如對於輸入序列 \(\langle 2, 0, 4, 9, 5, 1 \rangle\) ，一個正確的排序演算法應該要輸出正確的已排序序列 \(\langle 0, 1, 2, 4, 5, 9 \rangle\) </p>
+        <p>這裡的 \(\langle 2, 0, 4, 9, 5, 1 \rangle\) 稱為排序問題的一個實例 instance（也就是一個實際的例子）。</p>
+
+        <h3>何為正確的演算法</h3>
+
+        <p>對於一個計算性問題，一個演算法被視為正確的 correct 假如：對於每個該問題的實例，該演算法都能將其作為輸入，並停機 halts （即在有限時間內停止計算），最後輸出對於該實例的正確解。</p>
+        <p>一個正確的演算法也被稱為解決 solve 了該計算性問題。一個不正確的演算法，可能是因為停機後給出了錯誤的輸出，甚至是輸入某些實例後無法停機。</p>
+        <p>不過對於不正確的演算法，如果我們能夠控制輸出誤差的話，有時候也是有用的。</p>
+
+        <h2>Insertion Sort：如何設計與分析演算法 - CH2</h2>
+
+        <h3>排序問題中的元素</h3>
+
+        <p>
+            對於前述的 sorting problem，需要被排序的數字稱為鍵值 key。
+            當我們需要排序這些數字的時候，可能數字本身並不是所需要關注的，而是這些數字作為鍵值與其他資料關聯，這些資料被稱為衛星資料 satellite data。
+            而鍵值與衛星資料合起來會形成紀錄 record。
+        </p>
+        <p>
+            一個簡單例子：每個學生帶有學號與名字，若需要把學生名單按照學號排序，可以將學號視為 key 而名字視為 satellite data ，則名單中每個 record 就會變成 (學號 key, 名字 satellite data) 的組合；
+            反之，如果需要按照名字的筆劃進行排序，可以將名字視為 key 而學號視為 satellite data ，則名單中每個 record 就會變成 (名字 key, 學號 satellite data) 的組合。
+        </p>
+
+        <h3>插入排序 Insertion Sort</h3>
+
+        <p>
+            插入排序是一個用來排序的演算法，用於解決小規模問題時效率很高。
+            其思想和撲克牌理牌的方式很類似，左手拿著已經理好的部份手牌，右手拿一張還沒排序的牌，由右至左逐一檢查左手的牌，檢查右手牌是否可以放入到該位置，重複直到所有牌都已經排好。
+        </p>
+
+        <p>一個簡單的 C++ 實現如下：</p>
+
+        <pre class="line-numbers"><code class="language-cpp">
+            void InsertionSort(T* A, int n){
+                for( int i = 2; i <= n; ++i ){
+                    T key = A[i];
+                    int j = i - 1;
+                    while( j > 0 && A[j] > key ){
+                        A[j+1] = A[j];
+                        j = j - 1;
+                    }
+                    A[j+1] = key;
+                }
+            }
+            // A: The array to be sorted
+            // n: The number of the elements in A, assumed will not exceed INT_MAX-1
+        </code></pre>
+        
+        <h3>插入排序的正確性分析</h3>
+
+        <p>在分析之前，這裡先引入一個概念：迴圈不變式 Loop invariant，代表了在迴圈中每次迭代始終成立的性質。可以觀察到插入排序具有以下迴圈不變式：</p>
+        <blockquote>在行 2-10 的迴圈中，每次迭代開始時，子陣列 subarray \(A[1:i-1]\) 為原陣列中 \(A[1:i-1]\) 所有元素排序好的結果。</blockquote>
+        <p>可以看出，只要證明上述成立，那麼也就證明了插入排序的正確性。</p>
+        <p>證明迴圈不變式可以分成三個部份：</p>
+        <ul>
+            <li>初始化 Initialization：在迴圈開始之前，不變式成立。</li>
+            <li>維持 Maintenance：如果在迭代開始之前，不變式成立，則在該次迭代的下一次迭代開始之前，不變式依然成立。</li>
+            <li>終止 Termination：迴圈會終止，並且當其終止時，不變式保持的性質可以幫助我們證明演算法的正確性。</li>
+        </ul>
+        <p>可以注意到，前兩個部份其實就是數學歸納法，但是由於演算法中的迴圈通常被設計會在有限時間內停止，所以還需要在第三部份確保迴圈終止後也能保持不變式。</p>
+        <p>為了定義何為迴圈的開始與結束，我們可以將 <code>for</code> 的流程分解成三個部份：</p>
+        <ol>
+            <li>初始化計數器 <code>i</code></li>
+            <li>檢查中斷條件</li>
+            <li>執行迴圈體的主要邏輯</li>
+            <li>更新計數器，並回到第 2 步</li>
+        </ol>
+
+        <p>不變式在初始化是否成立，實際上會在第一步結束後才檢查。</p>
+
+        <p>由前述，我們可以逐個檢查不變式需要保持的三個部份：</p>
+        <ul>
+            <li>
+                <p>
+                    Initialization：<br>
+                    當 <code>i = 2</code> 時，子陣列 \(A[1:i-1]\) 恰好僅有一個元素 \(A[1]\)，顯然是原陣列 \(A[1:1]\) 中的元素所組成，並且子陣列 \(A[1:1]\) 當然是已經排序好的結果。
+                </p>
+            </li>
+            <li>
+                <p>
+                    Maintenance：<br>
+                    假設在迭代 <code>i</code> 開始前，外層迴圈不變式成立，即 \(A[1:i-1]\) 為排序好的子陣列。接著我們來看行 4-10 是如何維持這個性質的：
+                </p>
+                <p>
+                    行 4 先將當前要處理的元素 \(A[i]\) 存入 <code>key</code>。內層的 <code>while</code> 迴圈（行 6-9）負責在已排序的 \(A[1:i-1]\) 中，從右向左尋找 <code>key</code> 應該插入的位置。
+                </p>
+                <p>我們可以觀察到 <code>while</code> 迴圈具有以下性質：</p>
+                <blockquote>
+                    每次 <code>while</code> 迴圈迭代時，只要發現 \(A[j] > key\)，就會將 \(A[j]\) 往右平移一格到 \(A[j+1]\) 的位置。因為原先的 \(A[1:i-1]\) 已排序，這個平移操作不會破壞原有元素的相對大小，只是將大於 <code>key</code> 的元素往右推，並在索引 \(j\) 的位置留下一個「空位」準備給 <code>key</code>。
+                </blockquote>
+                <p>
+                    當 <code>while</code> 迴圈終止時，必然滿足以下兩種情況之一：<br>
+                    1. <code>j = 0</code>：代表 \(A[1:i-1]\) 中的所有元素都大於 <code>key</code>。<br>
+                    2. <code>A[j] &le; key</code>：找到了第一個不大於 <code>key</code> 的元素。
+                </p>
+                <p>
+                    無論哪種情況，原先在 \(j+1\) 到 \(i-1\) 的元素都已經被平移到了 \(j+2\) 到 \(i\)，且它們都大於 <code>key</code>；而 \(A[1:j]\) 的元素都小於或等於 <code>key</code>。因此，行 10 執行 <code>A[j+1] = key</code> 時，<code>key</code> 恰好被放入了正確的順序位置。
+                    此時，子陣列 \(A[1:i]\) 包含了原先 \(A[1:i]\) 的所有元素，並且已完全排序。這證明了在下一次迭代（<code>i+1</code>）開始前，外層迴圈不變式依然成立。
+                </p>
+            </li>
+            <li>
+                <p>
+                    Termination：<br>
+                    外層的 <code>for</code> 迴圈會在 <code>i > n</code> 時終止。因為 <code>i</code> 每次迭代增加 1，所以迴圈終止時 <code>i = n + 1</code>。
+                    將 <code>i = n + 1</code> 代入我們的迴圈不變式敘述中，可得：<br>
+                    「子陣列 \(A[1:(n+1)-1] = A[1:n]\) 為原陣列中 \(A[1:n]\) 所有元素排序好的結果。」<br>
+                    這正是整個陣列完成排序的定義，從而證明了該演算法的正確性。
+                </p>
+            </li>
+        </ul>
+        <h4>思考</h4>
+        <ul>
+            <li>
+                嘗試給出 <code>while</code> 保持了什麼迴圈不變式？並以其重新證明插入排序的正確性。
+            </li>
+        </ul>
+        <h4>習題</h4>
+        <ul>
+            <li>
+                <p>利用迴圈不變式證明 <code>fib</code> 可以正確計算前 <code>n</code> 項費氏數列。</p>
+                <pre><code class="language-cpp">
+                    void fib(T* F, int n){
+                        F[1] = 1, F[2] = 1;
+                        for( int i = 3; i <= n; ++i ) {
+                            F[i] = F[i-1] + F[i-2];
+                        }
+                    }
+                    // Assume n > 2
+                </code></pre>
+            </li>
+        </ul>
+    </article>
+    <script>
+        document.querySelectorAll("pre code").forEach(block => {
+            let lines = block.textContent.split("\n");
+            if (lines[0].trim() === "") lines.shift();
+            if (lines[lines.length - 1].trim() === "") lines.pop();
+            const indent = Math.min(
+                ...lines.filter(l => l.trim()).map(l => l.match(/^ */)[0].length)
+            );
+            block.textContent = lines.map(l => l.slice(indent)).join("\n");
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+
+</html>
