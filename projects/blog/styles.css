@@ -44,6 +44,73 @@ footer {
     font-size: 0.9em;
 }
 
+/* 共用外框樣式 */
+.detail-box {
+    background-color: #f9f9f9;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+/* 共用標題 (Summary) 樣式 */
+.detail-summary {
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+}
+
+/* Hover 效果：讓游標移上去時有一點回饋 */
+.detail-summary:hover {
+    opacity: 0.8;
+}
+
+.detail-box-color {
+    border-left: 4px solid #007BFF;
+}
+
+.detail-box-color .detail-summary {
+    color: #007BFF;
+}
+
+.post-header {
+    margin-bottom: 25px;
+    border-bottom: 2px solid #eaeaea;
+    /* 加一條底線區隔正文 */
+    padding-bottom: 15px;
+}
+
+.post-header h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* 日期 Meta 資訊的樣式 */
+.post-meta {
+    color: #666;
+    /* 使用較淡的灰色，不搶走正文焦點 */
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* 元素之間的間距 */
+}
+
+.post-meta .separator {
+    color: #ccc;
+    /* 分隔線顏色再淡一點 */
+}
+
+/* 針對 time 標籤可以加一點小裝飾（可選） */
+.post-meta time {
+    font-family: monospace;
+    /* 用等寬字體讓數字看起來較整齊 */
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
 .code-block {
     position: relative;
     margin: 1.5em 0;
@@ -56,28 +123,4 @@ pre {
     border-radius: 10px;
     overflow-x: auto;
     font-size: 14px;
-}
-
-/* 行號樣式 */
-pre.line-numbers {
-    padding-left: 3em;
-}
-
-/* Copy 按鈕 */
-.copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #333;
-    color: #fff;
-    border: none;
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    opacity: 0.7;
-}
-
-.copy-btn:hover {
-    opacity: 1;
 }

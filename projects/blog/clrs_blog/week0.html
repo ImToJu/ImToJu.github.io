@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CH0</title>
-    <link rel="stylesheet" href="/projects/blog/styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <script>
         MathJax = {
             tex: {
@@ -15,163 +15,273 @@
         };
     </script>
     <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <nav>
-        <a href="./">&larr; Back to Introduction</a>
-    </nav>
-    <article>
-        <h1>Week 0</h1>
+    <main>
+        <nav>
+            <a href="./">&larr; Back to Introduction</a>
+        </nav>
+        <article>
+            <header class="post-header">
+                <h1>Week 0</h1>
+                <div class="post-meta">
+                    <span>Date：<time datetime="2026-04-09">2026-04-09</time></span>
+                    <span class="separator">|</span>
+                    <span>Last Updated：<time datetime="2026-04-09">2026-04-09</time> by Jay</span>
+                </div>
+            </header>
 
-        本週參考 MIT 6.006 lecture 1 的內容，我們將討論一個關於尋找局部最高點的問題。
+            本週參考 MIT 6.006 lecture 1 的內容，我們將討論一個關於尋找局部最高點的問題。
 
-        <h2>Peak Finder</h2>
+            <h2>Peak Finder</h2>
 
-        <h3>問題敘述</h3>
+            <h3>問題敘述</h3>
 
-        <p>在一個 1 維 (1D) 的陣列中，我們希望找到一個局部最高點 Peak。</p>
+            <p>在一個 1 維 (1D) 的陣列中，我們希望找到一個局部最高點 Peak。</p>
 
-        <h3>相關定義</h3>
+            <h3>相關定義</h3>
 
-        <p>上述描述並不是非常清楚，下方我們給出了關於本問題中相關名詞較為嚴格的定義，以便能夠精確描述這個問題。</p>
-        <ul>
-            <li>正整數的記號：$$\mathbb{N} := \{1, 2, \dots\}$$</li>
-            <li>\(1\sim n\) 的正整數集合：$$\mathbb{N}_{\le n} := \{1, 2, \dots, n\}, n\in \mathbb{N}$$</li>
-            <li>
-                長度為 \(n\) 的 1D 陣列：
-                $$A_n := \{a_i\in \mathbb{N}: i \in \mathbb{N}_{\le n}\}, n\in \mathbb{N}$$
-                下方的討論除非有特別指出，否則 \(A_n\) 默認為某個長度為 \(n\) 的 1D 陣列。
-            </li>
-            <li>\(A_n\) 中元素 \(a_i\) 的鄰居：$$\text{nbr}(a_i) := \{ a_j\in A_n: |i-j| = 1 \}$$</li>
-            <li>\(A_n\) 的局部最高點 Peak：$$\text{Peak}(A_n) := \{a_i\in A_n:\forall x\in \text{nbr}(a_i),a_i \ge x\}$$</li>
-        </ul>
-        <p>上述問題可以重新描述為：對於長度為 \(n\) 的 1D 陣列 \(A_n\) ，找出 \(a\in \text{Peak}(A_n)\)</p>
-
-        <h3>簡單觀察</h3>
-
-        <ul>
-            <li>可以發現 \(A_n\) 的 Peak 並保證不唯一，即 $$\exists n\in \mathbb{N},\exists A_n:\text{Peak}(A_n) \ge 2$$</li>
-            <li> \(A_n\) 的 Peak 是否一定存在？
-                <ul>
-                    <li>定義 \(A_n\) 最大值為 $$\max(A_n):=\{x\in A_n: \forall y\in A_n, x \ge y\}$$</li>
-                    <li>觀察到 \(A_n\) 最大值一定是 Peak：\(\max(A_n)\subseteq \text{Peak}(A_n)\)</li>
-                    <li>而 \(A_n\) 最大值一定存在，具體證明可由反證法或是良序原理推得。</li>
-                </ul>
-            </li>
-        </ul>
-
-        <h3>直覺解法</h3>
-
-        <p>從某一端開始，依序逐個元素檢查是否滿足條件，直到抵達另一端。當抵達另一端時，該元素必為 Peak。</p>
-
-        <h3>分治解法</h3>
-
-        分治 Divide and Conquer，字面意思為「分而治之」，故名「分治法」。其思想為將問題分解成數個相似的子問題，藉由解決這些子問題來得到原問題的答案，通常我們期望這樣能夠降低問題的複雜度並減少解決時間。
-
-        <p>我們可以挑選 \(A_n\) 中的位於中央的元素 \(a_{\lceil n/2\rceil}=a_m\)，並對其進行如下檢查：</p>
-        <ul>
-            <li>如果 \(a_{m-1}\) 存在且 \(a_{m-1} > a_m\) ，則僅尋找新 1D 陣列 \(L=\{a_1,\dots,a_{m-1}\}\) 中的 Peak</li>
-            <li>如果 \(a_{m+1}\) 存在且 \(a_{m+1} > a_m\) ，則僅尋找新 1D 陣列 \(R=\{a_{m+1},\dots,a_{n}\}\) 中的 Peak</li>
-            <li>若上述條件皆不成立，則 \(a_{m}\in \text{Peak}(A_n)\)</li>
-        </ul>
-
-        <h4>該演算法的時間複雜度</h4>
-
-        時間複雜度 Time Complexity，一種用於描述或評估演算法從開始到結束的所需時間。一般來說，每個演算法需要關注的有：
-        <ul>
-            <li>平均情況下的時間複雜度</li>
-            <li>最差情況下的時間複雜度</li>
-            <li>最好情況下的時間複雜度</li>
-        </ul>
-        其中又以平均的時間複雜度最為重要，其次為最差時間複雜度。我們會使用 \(o,O,\Theta,\Omega,\omega\) 符號來表示時間複雜度
-        <ul>
-            <li>\(o(n^4)\) 表示該演算法需要時間 遠低於 \(n^4\) 級別，可以類比為遠小於符號 \(\ll\)</li>
-            <li>\(O(n^4)\) 表示該演算法需要時間 不高於 \(n^4\) 級別，可以類比為小於等於符號 \(\le\)</li>
-            <li>\(\Theta(n^4)\) 表示該演算法需要時間 約等於 \(n^4\) 級別，可以類比為等於符號 \(=\)</li>
-            <li>\(\Omega(n^4)\) 表示該演算法需要時間 不低於 \(n^4\) 級別，可以類比為大於等於符號 \(\ge\)</li>
-            <li>\(\omega(n^4)\) 表示該演算法需要時間 遠高於 \(n^4\) 級別，可以類比為遠大於符號 \(\gg\)</li>
-        </ul>
-        我們一般會使用 \(T(n)\) 來描述演算法的時間複雜度，例如 \(T(n)=O(n^3), T(n)=\omega(n\lg n + n)\)<br>
-        這裡的 \(n\) 表示問題的規模，以本問題為例，問題規模即為 1D 陣列的大小 \(|A_n|=n\)。
-        <p>
-            由於挑選中央元素並比較的這個動作視為常數時間，該演算法的時間複雜度可以表示為 $$T(n)=T(n/2)+\Theta(1)$$
-            這個式子可以一直寫下去 $$T(n)=T(n/2)+\Theta(1)=\dots=T(n/2^i)+i\times\Theta(1)$$
-            當 \(T(n/2^i)\) 足夠小，可以將其視為常數時間，於是可得
-            $$T(n)=T(n/2^i)+i\times\Theta(1)=\dots=\lg(n)\times\Theta(1)=\Theta(\lg(n))$$
-            由於問題規模是有限的，由阿基米德性質，我們總是可以保證能夠使得 \(T(n/2^i)\) 足夠小而視為常數。
-        </p>
-
-        <h4>如何證明該演算法的正確性？</h4>
-
-        留作讀者思考。
-
-        <h2>2D Peak Finder</h2>
-
-        <p>將原來的 1D 陣列改為 2D 陣列，同樣尋找該 2D 陣列的 Peak。</p>
-
-        <h3>相關定義</h3>
-
-        <ul>
-            <li>2D 陣列：$$M_{mn} := \{a_{ij}\in \mathbb{N}: (i,j) \in \mathbb{N}_{\le m}\times\mathbb{N}_{\le n}\}, m,n\in
-                \mathbb{N}$$</li>
-            <li>\(M_{mn}\) 中元素 \(a_{ij}\) 的鄰居：$$\text{nbr}(a_{ij}) := \{ a_{i'j'}\in A: |i-i'| + |j-j'| = 1 \}$$</li>
-            <li>\(M_{mn}\) 的局部最高點 Peak：$$\text{Peak}(M_{mn}) := \{a_{ij}\in M_{mn}:\forall x\in
-                \text{nbr}(a_{ij}),a_{ij} \ge x\}$$</li>
-            <li>為了避免混淆，我們將前述 1D 陣列的 Peak 稱為 1D-Peak。</li>
-        </ul>
-        <p>上述問題可以重新描述為：對於大小為 \(m\times n\) 的 2D 陣列 \(M_{mn}\) ，找出 \(a\in \text{Peak}(M_{mn})\)</p>
-
-        <h3>嘗試解法 #1</h3>
-
-        <ul>
-            <li>找到 \(M_{mn}\) 中間行 (middle column) ，即第 \(j=m/2\) 行的 1D-Peak</li>
-            <li>找到 \(M_{mn}\) 第 \(j\) 列 (\(j\)th row) 的 1D-Peak</li>
-            <li>上一步找到的 1D-Peak 即為 \(M_{mn}\) 的 Peak</li>
-        </ul>
-        <p>該解法不正確，可找到會給出錯誤答案的例子。</p>
-
-        <h3>嘗試解法 #2</h3>
-
-        <ul>
-            <li>找到 \(M_{mn}\) 中間行 (middle column) ，即第 \(j=m/2\) 行的 \(\max\)，假設為 \(a_{ij}\)</li>
-            <li>對於 \(M_{mn}\) 第 \(j\) 列 (\(j\)th row) ，比較 \(a_{ij}\) 的鄰居</li>
+            <p>上述描述並不是非常清楚，下方我們給出了關於本問題中相關名詞較為嚴格的定義，以便能夠精確描述這個問題。</p>
             <ul>
-                <li>對於鄰居 \(a_{ik}\) ，如果 \(a_{ik} > a_{ij}\) ，則選擇該側所有的行，即 \(1\sim k\) 或是 \(k \sim n\)，並對這些行尋找 Peak</li>
-                <li>如果 \(a_{ij}\) 皆不嚴格大於其鄰居，則 \(a_{ij}\) 就是所尋找的 Peak</li>
+                <li>正整數的記號：$$\mathbb{N} := \{1, 2, \dots\}$$</li>
+                <li>\(1\sim n\) 的正整數集合：$$\mathbb{N}_{\le n} := \{1, 2, \dots, n\}, n\in \mathbb{N}$$</li>
+                <li>
+                    長度為 \(n\) 的 1D 陣列：
+                    $$A_n := \{a_i\in \mathbb{N}: i \in \mathbb{N}_{\le n}\}, n\in \mathbb{N}$$
+                    下方的討論除非有特別指出，否則 \(A_n\) 默認為某個長度為 \(n\) 的 1D 陣列。
+                </li>
+                <li>\(A_n\) 中元素 \(a_i\) 的鄰居：$$\text{nbr}(a_i) := \{ a_j\in A_n: |i-j| = 1 \}$$</li>
+                <li>\(A_n\) 的局部最高點 Peak：$$\text{Peak}(A_n) := \{a_i\in A_n:\forall x\in \text{nbr}(a_i),a_i \ge x\}$$
+                </li>
             </ul>
-            <li>如果僅剩下一行，則該行的 \(\max\) 就是所尋找的 Peak</li>
-        </ul>
-        <p>
+            <p>上述問題可以重新描述為：對於長度為 \(n\) 的 1D 陣列 \(A_n\) ，找出 \(a\in \text{Peak}(A_n)\)</p>
 
-        <h4>該演算法的時間複雜度</h4>
+            <h3>簡單觀察</h3>
 
-        <p>
-            由於挑選最大值並比較的這個動作與 \(m\) 成線性關係，即 \(\Theta(m)\)，該演算法的時間複雜度可以表示為 $$T(m, n)=T(m, n/2)+\Theta(m)$$
-            理由與前述類似，可以將其寫為 $$T(m, n)=T(m, n/2^i)+i\times\Theta(m)=\dots=\lg(n)\times\Theta(m)=\Theta(m\lg(n))$$
-        </p>
+            <ul>
+                <li>可以發現 \(A_n\) 的 Peak 並保證不唯一，即 $$\exists n\in \mathbb{N},\exists A_n:|\text{Peak}(A_n)| \ge 2$$</li>
+                <li> \(A_n\) 的 Peak 是否一定存在？
+                    <ul>
+                        <li>定義 \(A_n\) 最大值為 $$\max(A_n):=\{x\in A_n: \forall y\in A_n, x \ge y\}$$</li>
+                        <li>觀察到 \(A_n\) 最大值一定是 Peak：\(\max(A_n)\subseteq \text{Peak}(A_n)\)</li>
+                        <li>而 \(A_n\) 最大值一定存在，具體證明可由反證法或是良序原理推得。</li>
+                    </ul>
+                </li>
+            </ul>
 
-        <h4>如何證明該演算法的正確性？</h4>
+            <h3>直覺解法</h3>
 
-        留作讀者思考。
+            <p>從某一端開始，依序逐個元素檢查是否滿足條件，直到抵達另一端。當抵達另一端時，該元素必為 Peak。</p>
 
-        <h4>思考</h4>
+            <h3>分治解法</h3>
 
-        <ul>
-            <li>如果不是找到最大值，而是找到 1D-Peak ，該演算法是否依然正確？</li>
-            <li>是否存在更快的演算法？給出其時間複雜度並說明。</li>
-        </ul>
+            分治 Divide and Conquer，字面意思為「分而治之」，故名「分治法」。其思想為將問題分解成數個相似的子問題，藉由解決這些子問題來得到原問題的答案，通常我們期望這樣能夠降低問題的複雜度並減少解決時間。
 
-        <h2>總結</h2>
-        
-        <p>
-            本週藉由 MIT 6.006 lecture 1 中介紹的 Peak Finder 問題，簡單討論了分治法和時間複雜度這兩個在演算法中相當重要的概念，更加詳細的內容會在未來深入討論。<br>
-            除此之外，與原課程不同的是，我們嘗試使用更多的數學語言來定義 Peak Finder 的相關概念，以期能夠精確的描述問題。
-        </p>
-    </article>
-    <footer>
-        <p>Edited at <time datetime="2026-04-01">2026-04-01</time> by Jay</p>
-    </footer>
+            <p>我們可以挑選 \(A_n\) 中的位於中央的元素 \(a_{\lceil n/2\rceil}=a_m\)，並對其進行如下檢查：</p>
+            <ul>
+                <li>如果 \(a_{m-1}\) 存在且 \(a_{m-1} > a_m\) ，則僅尋找新 1D 陣列 \(L=\{a_1,\dots,a_{m-1}\}\) 中的 Peak</li>
+                <li>如果 \(a_{m+1}\) 存在且 \(a_{m+1} > a_m\) ，則僅尋找新 1D 陣列 \(R=\{a_{m+1},\dots,a_{n}\}\) 中的 Peak</li>
+                <li>若上述條件皆不成立，則 \(a_{m}\in \text{Peak}(A_n)\)</li>
+            </ul>
+
+            <h4>該演算法的時間複雜度</h4>
+
+            時間複雜度 Time Complexity，一種用於描述或評估演算法從開始到結束的所需時間。一般來說，每個演算法需要關注的有：
+            <ul>
+                <li>平均情況下的時間複雜度</li>
+                <li>最差情況下的時間複雜度</li>
+                <li>最好情況下的時間複雜度</li>
+            </ul>
+            其中又以平均的時間複雜度最為重要，其次為最差時間複雜度。我們會使用 \(o,O,\Theta,\Omega,\omega\) 符號來表示時間複雜度
+            <ul>
+                <li>\(o(n^4)\) 表示該演算法需要時間 遠低於 \(n^4\) 級別，可以類比為遠小於符號 \(\ll\)</li>
+                <li>\(O(n^4)\) 表示該演算法需要時間 不高於 \(n^4\) 級別，可以類比為小於等於符號 \(\le\)</li>
+                <li>\(\Theta(n^4)\) 表示該演算法需要時間 約等於 \(n^4\) 級別，可以類比為等於符號 \(=\)</li>
+                <li>\(\Omega(n^4)\) 表示該演算法需要時間 不低於 \(n^4\) 級別，可以類比為大於等於符號 \(\ge\)</li>
+                <li>\(\omega(n^4)\) 表示該演算法需要時間 遠高於 \(n^4\) 級別，可以類比為遠大於符號 \(\gg\)</li>
+            </ul>
+            我們一般會使用 \(T(n)\) 來描述演算法的時間複雜度，例如 \(T(n)=O(n^3), T(n)=\omega(n\lg n + n)\)<br>
+            這裡的 \(n\) 表示問題的規模，以本問題為例，問題規模即為 1D 陣列的大小 \(|A_n|=n\)。
+            <p>
+                由於挑選中央元素並比較的這個動作視為常數時間，該演算法的時間複雜度可以表示為 $$T(n)=T(n/2)+\Theta(1)$$
+                這個式子可以一直寫下去 $$T(n)=T(n/2)+\Theta(1)=\dots=T(n/2^i)+i\times\Theta(1)$$
+                當 \(T(n/2^i)\) 足夠小，可以將其視為常數時間，於是可得
+                $$T(n)=T(n/2^i)+i\times\Theta(1)=\dots=\lg(n)\times\Theta(1)=\Theta(\lg(n))$$
+                由於問題規模是有限的，由阿基米德性質，我們總是可以保證能夠使得 \(T(n/2^i)\) 足夠小而視為常數。
+            </p>
+
+            <h4>如何證明該演算法的正確性？</h4>
+
+            <details class="detail-box detail-box-color">
+                <summary class="detail-summary">展開查看正確性證明（數學歸納法）</summary>
+                <p>我們對 1D 陣列的長度 \(n\) 使用數學歸納法來證明：</p>
+                <ul>
+                    <li>
+                        <strong>Base case（基本情況）：</strong><br>
+                        當 \(n = 1\) 時，陣列中僅有一個元素 \(a_1\)，因其沒有鄰居，自然滿足 \(\forall x \in \text{nbr}(a_1), a_1 \ge
+                        x\)。演算法會直接回傳 \(a_1\)，證明成立。
+                    </li>
+                    <li>
+                        <strong>Inductive step（歸納步驟）：</strong><br>
+                        假設對於所有長度 \(< n\) 的 1D 陣列，該演算法皆能正確找到 Peak。<br>
+                            對於長度為 \(n\) 的陣列 \(A_n\)，演算法挑選中間元素 \(a_m\) 進行判斷（其中 \(m = \lceil n/2 \rceil\)）：
+                            <ol>
+                                <li><strong>情況一：</strong> 若 \(a_m \ge a_{m-1}\) 且 \(a_m \ge a_{m+1}\)，則 \(a_m\) 本身就是
+                                    \(A_n\) 的 Peak，演算法回傳 \(a_m\)，正確。</li>
+                                <li><strong>情況二：</strong> 若 \(a_{m-1} > a_m\)，演算法遞迴進入左半部子陣列 \(L = \{a_1, \dots,
+                                    a_{m-1}\}\)。<br>
+                                    由歸納假設，演算法必定能在 \(L\) 中找到一個 Peak，設為 \(p\)。<br>
+                                    我們要證明 \(p\) 也是原陣列 \(A_n\) 的 Peak：
+                                    <ul>
+                                        <li>若 \(p\) 不是邊界元素 \(a_{m-1}\)，則它的鄰居在 \(A_n\) 中與在 \(L\) 中完全相同，因此它依然是 Peak。</li>
+                                        <li>若 \(p = a_{m-1}\)，它在 \(L\) 中大於等於其左鄰居 \(a_{m-2}\)。而在 \(A_n\) 中，它的右鄰居是
+                                            \(a_m\)。已知前提為 \(a_{m-1} > a_m\)，因此 \(p > a_m\)。綜合可知，\(p\) 大於等於左右鄰居，故 \(p\)
+                                            也是 \(A_n\) 的 Peak。</li>
+                                    </ul>
+                                </li>
+                                <li><strong>情況三：</strong> 若 \(a_{m+1} > a_m\)，同理情況二，演算法在右半部找到的 Peak 也必然是 \(A_n\) 的 Peak。
+                                </li>
+                            </ol>
+                    </li>
+                </ul>
+                <p>由數學歸納法可知，該演算法對於任意長度 \(n\) 皆能正確找到 Peak。 \(\blacksquare\)</p>
+            </details>
+
+            <h2>2D Peak Finder</h2>
+
+            <p>將原來的 1D 陣列改為 2D 陣列，同樣尋找該 2D 陣列的 Peak。</p>
+
+            <h3>相關定義</h3>
+
+            <ul>
+                <li>2D 陣列：$$M_{mn} := \{a_{ij}\in \mathbb{N}: (i,j) \in \mathbb{N}_{\le m}\times\mathbb{N}_{\le n}\},
+                    m,n\in
+                    \mathbb{N}$$</li>
+                <li>\(M_{mn}\) 中元素 \(a_{ij}\) 的鄰居：$$\text{nbr}(a_{ij}) := \{ a_{i'j'}\in A: |i-i'| + |j-j'| = 1 \}$$
+                </li>
+                <li>\(M_{mn}\) 的局部最高點 Peak：$$\text{Peak}(M_{mn}) := \{a_{ij}\in M_{mn}:\forall x\in
+                    \text{nbr}(a_{ij}),a_{ij} \ge x\}$$</li>
+                <li>為了避免混淆，我們將前述 1D 陣列的 Peak 稱為 1D-Peak。</li>
+            </ul>
+            <p>上述問題可以重新描述為：對於大小為 \(m\times n\) 的 2D 陣列 \(M_{mn}\) ，找出 \(a\in \text{Peak}(M_{mn})\)</p>
+
+            <h3>嘗試解法 #1</h3>
+
+            <ul>
+                <li>找到 \(M_{mn}\) 中間行 (middle column) ，即第 \(j=m/2\) 行的 1D-Peak</li>
+                <li>找到 \(M_{mn}\) 第 \(j\) 列 (\(j\)th row) 的 1D-Peak</li>
+                <li>上一步找到的 1D-Peak 即為 \(M_{mn}\) 的 Peak</li>
+            </ul>
+            <p>該解法不正確，可找到會給出錯誤答案的例子。</p>
+
+            <details class="detail-box detail-box-color">
+                <summary class="detail-summary">展開查看反例</summary>
+                <p>考慮以下 \(3\times 3\) 的 2D 陣列：</p>
+                <pre><code class="language-txt">
+                    3 4 5
+                    2 3 6
+                    1 2 3
+                </code></pre>
+                <p>根據解法 #1 的步驟，我們首先找到中間行（第 2 行）的 1D-Peak，該行為 \(2, 3, 4\)，其 1D-Peak 為 \(4\)。接著我們找到第 2 列的 1D-Peak，該列為
+                    \(3, 4, 5\)，其 1D-Peak 為 \(5\)。最後我們得到的 Peak 為 \(5\)，但實際上 \(M_{mn}\) 的 Peak 是 \(6\)，因此該解法不正確。</p>
+            </details>
+
+            <h3>嘗試解法 #2</h3>
+
+            <ul>
+                <li>找到 \(M_{mn}\) 中間行 (middle column) ，即第 \(j=m/2\) 行的 \(\max\)，假設為 \(a_{ij}\)</li>
+                <li>對於 \(M_{mn}\) 第 \(j\) 列 (\(j\)th row) ，比較 \(a_{ij}\) 的鄰居</li>
+                <ul>
+                    <li>對於鄰居 \(a_{ik}\) ，如果 \(a_{ik} > a_{ij}\) ，則選擇該側所有的行，即 \(1\sim k\) 或是 \(k \sim n\)，並對這些行尋找 Peak
+                    </li>
+                    <li>如果 \(a_{ij}\) 皆不嚴格大於其鄰居，則 \(a_{ij}\) 就是所尋找的 Peak</li>
+                </ul>
+                <li>如果僅剩下一行，則該行的 \(\max\) 就是所尋找的 Peak</li>
+            </ul>
+            <p>
+
+            <h4>該演算法的時間複雜度</h4>
+
+            <p>
+                由於挑選最大值並比較的這個動作與 \(m\) 成線性關係，即 \(\Theta(m)\)，該演算法的時間複雜度可以表示為 $$T(m, n)=T(m, n/2)+\Theta(m)$$
+                理由與前述類似，可以將其寫為 $$T(m, n)=T(m, n/2^i)+i\times\Theta(m)=\dots=\lg(n)\times\Theta(m)=\Theta(m\lg(n))$$
+            </p>
+
+            <h4>如何證明該演算法的正確性？</h4>
+
+            <details class="detail-box detail-box-color">
+                <summary class="detail-summary">展開查看正確性證明（數學歸納法）</summary>
+                <p>我們對 2D 陣列的行數（Column size）\(n\) 進行數學歸納法：</p>
+                <ul>
+                    <li>
+                        <strong>Base case（基本情況）：</strong><br>
+                        當行數僅剩 1 行時（即一個 \(m \times 1\) 的陣列），演算法會尋找該行的 \(\max\)。因為只有 1 行，該元素沒有左右鄰居；又因為它是該行的
+                        \(\max\)，必然大於等於其上下鄰居，故該元素為 2D Peak。證明成立。
+                    </li>
+                    <li>
+                        <strong>Inductive step（歸納步驟）：</strong><br>
+                        假設該演算法對於所有行數 \(< n\) 的 2D 陣列皆正確。對於大小為 \(m \times n\) 的陣列 \(M_{mn}\)：<br>
+                            我們在中間行 \(j\) 找到最大值 \(a_{ij}\)，並比較其左右鄰居（假設為 \(a_{i, j-1}\) 與 \(a_{i, j+1}\)）。
+                            <ol>
+                                <li><strong>情況一：</strong> \(a_{ij}\) 大於等於其所有鄰居。由於 \(a_{ij}\) 已經是第 \(j\)
+                                    行的最大值（保證大於等於上下鄰居），加上大於等於左右鄰居，故 \(a_{ij}\) 為 Peak，正確。</li>
+                                <li><strong>情況二：</strong> 其左鄰居較大，即 \(a_{i, j-1} > a_{ij}\)。此時演算法遞迴進入左半部子陣列（包含第 \(1 \sim
+                                    j-1\) 行）。<br>
+                                    由歸納假設可知，演算法會在左半部找到一個 Peak，設為 \(p\)。<br>
+                                    若 \(p\) 不是在切割邊界（即第 \(j-1\) 行），則 \(p\) 在原陣列中依然是 Peak。若 \(p\) 剛好落在邊界上（設為 \(p = a_{k,
+                                    j-1}\)），我們需要確認它是否會小於原陣列中的右鄰居 \(a_{k, j}\)：<br>
+                                    已知：
+                                    <ul>
+                                        <li>因為 \(p\) 是左半部的 Peak，所以 \(p \ge\) 它的所有鄰居。</li>
+                                        <li>因為 \(a_{ij}\) 是第 \(j\) 行的 \(\max\)，所以 \(a_{ij} \ge a_{k, j}\)。</li>
+                                        <li>由進入左半部的條件得知：\(a_{i, j-1} > a_{ij}\)。</li>
+                                        <li>因為 \(p\) 在第 \(j-1\) 行中也一定大於等於 \(a_{i, j-1}\)（甚至 \(p\) 可能就是 \(a_{i, j-1}\)
+                                            本身）。</li>
+                                    </ul>
+                                    將上述不等式串接起來：$$p \ge a_{i, j-1} > a_{ij} \ge a_{k, j}$$
+                                    我們得出 \(p > a_{k, j}\)，這意味著 \(p\) 嚴格大於它在原陣列右邊的鄰居！因此 \(p\) 在恢復為 \(M_{mn}\) 視角時，依然是個
+                                    Peak。
+                                </li>
+                                <li><strong>情況三：</strong> 若右鄰居較大，邏輯與情況二完全對稱，找到的 \(p\) 亦必為 \(M_{mn}\) 的 Peak。</li>
+                            </ol>
+                    </li>
+                </ul>
+                <p>由數學歸納法得證，此演算法必定能找到 2D Peak。 \(\blacksquare\)</p>
+            </details>
+
+            <h4>思考</h4>
+
+            <ul>
+                <li>如果不是找到最大值，而是找到 1D-Peak ，該演算法是否依然正確？</li>
+                <li>是否存在更快的演算法？給出其時間複雜度並說明。</li>
+            </ul>
+
+            <h2>總結</h2>
+
+            <p>
+                本週藉由 MIT 6.006 lecture 1 中介紹的 Peak Finder 問題，簡單討論了分治法和時間複雜度這兩個在演算法中相當重要的概念，更加詳細的內容會在未來深入討論。<br>
+                除此之外，與原課程不同的是，我們嘗試使用更多的數學語言來定義 Peak Finder 的相關概念，以期能夠精確的描述問題。
+            </p>
+        </article>
+        <footer>
+            <a href="#top">&uarr; Back to Top</a>
+        </footer>
+
+        <script>
+            document.querySelectorAll("pre code").forEach(block => {
+                let lines = block.textContent.split("\n");
+                if (lines[0].trim() === "") lines.shift();
+                if (lines[lines.length - 1].trim() === "") lines.pop();
+                const indent = Math.min(
+                    ...lines.filter(l => l.trim()).map(l => l.match(/^ */)[0].length)
+                );
+                block.textContent = lines.map(l => l.slice(indent)).join("\n");
+            });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    </main>
 </body>
 
 </html>
